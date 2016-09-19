@@ -14,7 +14,7 @@ def main(argv):
     w = args.w
     h = args.h
     seed = args.seed
-    
+
 if __name__ == "__main__":
     import sys
     main(sys.argv)
