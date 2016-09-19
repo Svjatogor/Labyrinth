@@ -1,4 +1,5 @@
 import argparse
+import random
 
 def main(argv):
     # parsing arguments
@@ -11,10 +12,11 @@ def main(argv):
     if args.h == None or args.w == None:
         print("You must enter the dimensions of the maze")
         return
-
     w = args.w
     h = args.h
     seed = args.seed
+    # init random number generator
+    random.seed(seed)
     # generate empry string
     maze_multiplicity = [[0] * w] * h# matrix for multiplicity that describe maze
     cell_border = [[''] * w] * h
@@ -34,8 +36,6 @@ def main(argv):
             if maze_multiplicity[i][k] == maze_multiplicity[i][k + 1]:
                 cell_border[i][k] = 'right'
                 continue
-
-
 
 if __name__ == "__main__":
     import sys
