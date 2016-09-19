@@ -16,7 +16,8 @@ def main(argv):
     h = args.h
     seed = args.seed
     # generate empry string
-    maze_multiplicity = [[0] * w] # matrix for multiplicity that describe maze
+    maze_multiplicity = [[0] * w] * h# matrix for multiplicity that describe maze
+    cell_border = [[''] * w] * h
     # build labyrinth
     for i in range(h):
         # add unique multiplicity for empty cell
@@ -27,7 +28,12 @@ def main(argv):
                     maze_multiplicity[i][j] = maze_multiplicity[i][j - 1] + 1
                 else:
                     maze_multiplicity[i][j] = 1
-        
+        # create right border
+        for k in range(w):
+            # if current cell has same multiplicity as the right cell
+            if maze_multiplicity[i][k] == maze_multiplicity[i][k + 1]:
+                cell_border[i][k] = 'right'
+                continue
 
 
 
