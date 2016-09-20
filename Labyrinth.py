@@ -73,8 +73,8 @@ def main(argv):
         if i != h - 1:
             # build next row
             # copy current row
-            maze_multiplicity.append(maze_multiplicity[i])
-            cell_border.append(cell_border[i])
+            maze_multiplicity.append(maze_multiplicity[i].copy())
+            cell_border.append(cell_border[i].copy())
             # delete right border
             for j in range(w):
                 index_s = cell_border[i + 1][j].find('right')
