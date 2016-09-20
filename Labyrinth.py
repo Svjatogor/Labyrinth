@@ -64,7 +64,24 @@ def main(argv):
             if random.random() > 0.5:
                 # build wall
                 cell_border[i][k] += 'down'
-                 
+        # 5. building next or last row
+        if i != h - 1:
+            # build next row
+            # copy current row
+            maze_multiplicity[i + 1] = maze_multiplicity[i]
+            cell_border[i + 1] = cell_border[i]
+            # delete right border
+            for j in range(w):
+                index_s = cell_border[i + 1][j].find('right')
+                if index_s != -1:
+                    cell_border[i + 1][j] = cell_border[i + 1][j][index_s:]
+            # delete cell with down wall
+            for j in range(w):
+                index_s = cell_border[i + 1][j].find('down')
+                if index_s != -1:
+                    maze_multiplicity[i + 1][j] = 0
+                    cell_border[i + 1][j] = ''
+
 if __name__ == "__main__":
     import sys
     main(sys.argv)
