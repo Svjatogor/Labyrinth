@@ -6,19 +6,19 @@ def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument("--w", type=int, default=8, help="width maze")
     parser.add_argument("--h", type=int, default=4, help="height maze")
-    parser.add_argument("--seed", type=int, default=0, help="random key")
+    parser.add_argument("--seed", type=int, default=1, help="random key")
     args = parser.parse_args()
     w = args.w
     h = args.h
     seed = args.seed
     # 1. generate empty string
     # matrix for multiplicity that describe maze
-    maze_multiplicity = [] * h
+    maze_multiplicity = [0] * h
     # matrix walls
-    cell_border = [] * h
+    cell_border = [0] * h
     for i in range(h):
         maze_multiplicity[i] = [0] * w
-        cell_border = [''] * w
+        cell_border[i] = [''] * w
     # build labyrinth
     for i in range(h):
         # 2. add unique multiplicity for empty cell
@@ -36,8 +36,9 @@ def main(argv):
                 cell_border[i][k] += 'right'
                 continue
             # build the wall or not
-            random.seed(seed)
-            if random.random() > 0.5:
+            random.seed(seed * k)
+            rand = random.uniform(0, 1)
+            if rand > 0.5:
                 # build wall
                 cell_border[i][k] += 'right'
             else:
@@ -65,8 +66,9 @@ def main(argv):
             # if cell is not one or that build wall or not :)
             if count_cell == 1 or count_cell == down_count + 1:
                 continue
-            random.seed(seed)
-            if random.random() > 0.5:
+            random.seed(seed * k)
+            rand = random.uniform(0, 1)
+            if rand > 0.5:
                 # build wall
                 cell_border[i][k] += 'down'
         # 5. building next or last row
