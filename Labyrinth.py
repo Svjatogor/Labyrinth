@@ -14,12 +14,11 @@ def main(argv):
     random.seed(seed)
     # 1. generate empty string
     # matrix for multiplicity that describe maze
-    maze_multiplicity = [0] * h
+    maze_multiplicity = [0]
     # matrix walls
-    cell_border = [0] * h
-    for i in range(h):
-        maze_multiplicity[i] = [0] * w
-        cell_border[i] = [''] * w
+    cell_border = [0]
+    maze_multiplicity[0] = [0] * w
+    cell_border[0] = [''] * w
     # build labyrinth
     for i in range(h):
         # 2. add unique multiplicity for empty cell
@@ -74,8 +73,8 @@ def main(argv):
         if i != h - 1:
             # build next row
             # copy current row
-            maze_multiplicity[i + 1] = maze_multiplicity[i]
-            cell_border[i + 1] = cell_border[i]
+            maze_multiplicity.append(maze_multiplicity[i])
+            cell_border.append(cell_border[i])
             # delete right border
             for j in range(w):
                 index_s = cell_border[i + 1][j].find('right')
