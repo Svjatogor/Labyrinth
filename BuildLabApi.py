@@ -6,19 +6,9 @@ HORIZONTAL_WALL = " * *"
 
 
 def build_horizontal_wall(lenght):
-    single_wall = "* "
+    single_wall = "* * "
     print(single_wall * lenght, end='')
-
-def build_vertical_wall(lenght):
-    single_wall = "*\n"
-    print(single_wall * lenght, end='')
-    build_horizontal_wall(2)
-
-def make_cell(horizontal=False):
-    if horizontal:
-        print(HORIZONTAL_OPENING, end='')
-    else:
-        print(VERTICAL_OPENING, end='')
+    print('*', end='')
 
 def build_row(row, starting_row = False):
     print() # new row
@@ -42,14 +32,13 @@ def build_row(row, starting_row = False):
             print(HORIZONTAL_WALL, end='')
         elif i.find('right') != -1:
             print(SPASE_FOR_CELL + '*', end='')
+        else:
+            print(HORIZONTAL_OPENING, end='')
 
-def build_maze
-
-
-
-
-
-
-build_horizontal_wall(8)
-build_row(['rightdown', 'rightdown', 'rightdown'], starting_row=True)
-build_row(['rightdown', 'right', 'rightdown'])
+def build_maze(maze_plan):
+    build_horizontal_wall(len(maze_plan[0]))
+    for plan_row in maze_plan:
+        if plan_row == maze_plan[0]:
+            build_row(plan_row, starting_row=True)
+        else:
+            build_row(plan_row)

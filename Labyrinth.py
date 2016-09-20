@@ -1,5 +1,6 @@
 import argparse
 import random
+from BuildLabApi import build_maze
 
 def main(argv):
     # parsing arguments
@@ -104,6 +105,11 @@ def main(argv):
                 if j < w - 1:
                     # merge multiplicity
                     maze_multiplicity[i][j + 1] = maze_multiplicity[i][j]
+    # add right border in last cell
+    for i in range(h):
+        cell_border[i][len(cell_border[i]) - 1] = 'right' + cell_border[i][len(cell_border[i]) - 1]
+    # build maze
+    build_maze(cell_border)
 
 if __name__ == "__main__":
     import sys
