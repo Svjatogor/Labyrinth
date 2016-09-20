@@ -37,8 +37,8 @@ def main(argv):
                 cell_border[i][k] += 'right'
                 continue
             # build the wall or not
-            rand = random.randint(0, 100)
-            if rand > 50:
+            rand_right = random.randint(0, 100)
+            if rand_right > 50:
                 # build wall
                 cell_border[i][k] += 'right'
             else:
@@ -66,8 +66,8 @@ def main(argv):
             # if cell is not one or that build wall or not :)
             if count_cell == 1 or count_cell == down_count + 1:
                 continue
-            rand = random.randint(0, 100)
-            if rand > 50:
+            rand_down = random.randint(0, 100)
+            if rand_down > 50:
                 # build wall
                 cell_border[i][k] += 'down'
         # 5. building next or last row
@@ -80,7 +80,7 @@ def main(argv):
             for j in range(w):
                 index_s = cell_border[i + 1][j].find('right')
                 if index_s != -1:
-                    cell_border[i + 1][j] = cell_border[i + 1][j][index_s:]
+                    cell_border[i + 1][j] = cell_border[i + 1][j][index_s + len('right'):]
             # delete cell with down wall
             for j in range(w):
                 index_s = cell_border[i + 1][j].find('down')
@@ -97,7 +97,7 @@ def main(argv):
                 if j != w - 1 and maze_multiplicity[i][j] != maze_multiplicity[i][j + 1]:
                     index_s = cell_border[i][j].find('right')
                     if index_s != -1:
-                        cell_border[i][j] = cell_border[i][j][index_s:]
+                        cell_border[i][j] = cell_border[i][j][index_s + len('right'):]
                     # merge multiplicity
                     maze_multiplicity[i][j + 1] = maze_multiplicity[i][j]
 
