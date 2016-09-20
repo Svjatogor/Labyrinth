@@ -11,6 +11,7 @@ def main(argv):
     w = args.w
     h = args.h
     seed = args.seed
+    random.seed(seed)
     # 1. generate empty string
     # matrix for multiplicity that describe maze
     maze_multiplicity = [0] * h
@@ -36,9 +37,8 @@ def main(argv):
                 cell_border[i][k] += 'right'
                 continue
             # build the wall or not
-            random.seed(seed * k)
-            rand = random.uniform(0, 1)
-            if rand > 0.5:
+            rand = random.randint(0, 100)
+            if rand > 50:
                 # build wall
                 cell_border[i][k] += 'right'
             else:
@@ -66,9 +66,8 @@ def main(argv):
             # if cell is not one or that build wall or not :)
             if count_cell == 1 or count_cell == down_count + 1:
                 continue
-            random.seed(seed * k)
-            rand = random.uniform(0, 1)
-            if rand > 0.5:
+            rand = random.randint(0, 100)
+            if rand > 50:
                 # build wall
                 cell_border[i][k] += 'down'
         # 5. building next or last row
