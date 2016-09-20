@@ -4,16 +4,21 @@ import random
 def main(argv):
     # parsing arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--w", type=int, default=2, help="width maze")
-    parser.add_argument("--h", type=int, default=2, help="height maze")
+    parser.add_argument("--w", type=int, default=8, help="width maze")
+    parser.add_argument("--h", type=int, default=4, help="height maze")
     parser.add_argument("--seed", type=int, default=0, help="random key")
     args = parser.parse_args()
     w = args.w
     h = args.h
     seed = args.seed
     # 1. generate empty string
-    maze_multiplicity = [[0] * w] * h # matrix for multiplicity that describe maze
-    cell_border = [[''] * w] * h
+    # matrix for multiplicity that describe maze
+    maze_multiplicity = [] * h
+    # matrix walls
+    cell_border = [] * h
+    for i in range(h):
+        maze_multiplicity[i] = [0] * w
+        cell_border = [''] * w
     # build labyrinth
     for i in range(h):
         # 2. add unique multiplicity for empty cell
