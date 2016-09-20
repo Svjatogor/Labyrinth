@@ -1,16 +1,14 @@
 WALL_POINT_SIZE = 3
 HORIZONTAL_OPENING = " " * 4
-VERTICAL_OPENING = "\n\n"
 SPASE_FOR_CELL = " " * 3
 HORIZONTAL_WALL = " * *"
-
 
 def build_horizontal_wall(lenght):
     single_wall = "* * "
     print(single_wall * lenght, end='')
     print('*', end='')
 
-def build_row(row, starting_row = False):
+def build_row(row, starting_row = False, ending_row = False):
     print() # new row
     # first symbolic row
     # print left border
@@ -19,12 +17,13 @@ def build_row(row, starting_row = False):
     else:
         print('*', end='')
     for i in row:
-        print(SPASE_FOR_CELL, end='') # print cell
-        if i.find('right') != -1:
-            # draw wall point
-            print('*', end='')
-        else:
-            print(' ', end='')
+        if ending_row == False:
+            print(SPASE_FOR_CELL, end='') # print cell
+            if i.find('right') != -1:
+                # draw wall point
+                print('*', end='')
+            else:
+                print(' ', end='')
     # second symbolic row (down wall)
     print('\n*', end='')
     for i in row:
@@ -40,5 +39,7 @@ def build_maze(maze_plan):
     for plan_row in maze_plan:
         if plan_row == maze_plan[0]:
             build_row(plan_row, starting_row=True)
+        elif plan_row == maze_plan[len(maze_plan) - 1]:
+            build_row(plan_row, starting_row=False, ending_row=True)
         else:
             build_row(plan_row)
