@@ -106,8 +106,10 @@ def main(argv):
                     # merge multiplicity
                     maze_multiplicity[i][j + 1] = maze_multiplicity[i][j]
     # add right border in last cell
+    exit_row = random.randint(0, h - 1)
     for i in range(h):
-        cell_border[i][len(cell_border[i]) - 1] = 'right' + cell_border[i][len(cell_border[i]) - 1]
+        if i != exit_row:
+            cell_border[i][len(cell_border[i]) - 1] = 'right' + cell_border[i][len(cell_border[i]) - 1]
     # build maze
     build_maze(cell_border)
 
