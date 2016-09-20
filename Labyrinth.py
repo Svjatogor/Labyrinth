@@ -21,14 +21,17 @@ def main(argv):
     cell_border[0] = [''] * w
     # build labyrinth
     for i in range(h):
+        # generate unique cell
+        multiplicity_to_add = []
+        for j in range(1, w + 1):
+            if not j in maze_multiplicity[i]:
+                multiplicity_to_add.append(j)
         # 2. add unique multiplicity for empty cell
         for j in range(w):
             if maze_multiplicity[i][j] == 0:
                 # check the left border
-                if j > 0:
-                    maze_multiplicity[i][j] = maze_multiplicity[i][j - 1] + 1
-                else:
-                    maze_multiplicity[i][j] = 1
+                maze_multiplicity[i][j] = multiplicity_to_add[0]
+                multiplicity_to_add = multiplicity_to_add[1:]
         # 3. build right border
         for k in range(w - 1):
             # if current cell has same multiplicity as the right cell
