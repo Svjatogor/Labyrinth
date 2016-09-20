@@ -81,6 +81,19 @@ def main(argv):
                 if index_s != -1:
                     maze_multiplicity[i + 1][j] = 0
                     cell_border[i + 1][j] = ''
+        else:
+            # build last row
+            # build down wall
+            for j in range(w):
+                if cell_border[i][j].find('down') == -1:
+                    cell_border[i][j] += 'down'
+                # delete wall between multiplicity
+                if j != w - 1 and maze_multiplicity[i][j] != maze_multiplicity[i][j + 1]:
+                    index_s = cell_border[i][j].find('right')
+                    if index_s != -1:
+                        cell_border[i][j] = cell_border[i][j][index_s:]
+                    # merge multiplicity
+                    maze_multiplicity[i][j + 1] = maze_multiplicity[i][j]
 
 if __name__ == "__main__":
     import sys
