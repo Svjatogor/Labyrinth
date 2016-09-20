@@ -15,14 +15,12 @@ def main(argv):
     w = args.w
     h = args.h
     seed = args.seed
-    # init random number generator
-    random.seed(seed)
-    # generate empry string
-    maze_multiplicity = [[0] * w] * h# matrix for multiplicity that describe maze
+    # 1. generate empty string
+    maze_multiplicity = [[0] * w] * h # matrix for multiplicity that describe maze
     cell_border = [[''] * w] * h
     # build labyrinth
     for i in range(h):
-        # add unique multiplicity for empty cell
+        # 2. add unique multiplicity for empty cell
         for j in range(w):
             if maze_multiplicity[i][j] == 0:
                 # check the left border
@@ -30,12 +28,20 @@ def main(argv):
                     maze_multiplicity[i][j] = maze_multiplicity[i][j - 1] + 1
                 else:
                     maze_multiplicity[i][j] = 1
-        # create right border
-        for k in range(w):
+        # 3. create right border
+        for k in range(w - 1):
             # if current cell has same multiplicity as the right cell
             if maze_multiplicity[i][k] == maze_multiplicity[i][k + 1]:
                 cell_border[i][k] = 'right'
                 continue
+            # build the wall or not
+            random.seed(seed)
+            if random.random() > 0.5:
+                # build wall
+                cell_border[i][k] = 'right'
+            else:
+                # not building wall, merge multiplicity
+                maze_multiplicity[i][k + 1] = maze_multiplicity[i][k]
 
 if __name__ == "__main__":
     import sys
