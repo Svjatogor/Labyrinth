@@ -42,7 +42,7 @@ def main(argv):
         for k in range(w):
             # search cell in this multiplicity
             down_count = 0
-            count_cell = 0
+            count_cell = 1
             # left search
             q = k - 1
             while q >= 0 and maze_multiplicity[i][k] == maze_multiplicity[i][q]:
@@ -53,8 +53,18 @@ def main(argv):
             # right search
             q = k + 1
             while q < w and maze_multiplicity[i][k] == maze_multiplicity[i][q]:
-
-
+                count_cell += 1
+                if cell_border[i][q] == 'rightdown' or cell_border[i][q] == 'down':
+                    down_count += 1
+                q += 1
+            # if cell is not one or that build wall or not :)
+            if count_cell == 1 or count_cell == down_count + 1:
+                continue
+            random.seed(seed)
+            if random.random() > 0.5:
+                # build wall
+                cell_border[i][k] += 'down'
+                 
 if __name__ == "__main__":
     import sys
     main(sys.argv)
