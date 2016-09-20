@@ -43,3 +43,4 @@ def build_maze(maze_plan):
             build_row(plan_row, starting_row=False, ending_row=True)
         else:
             build_row(plan_row)
+    print()
