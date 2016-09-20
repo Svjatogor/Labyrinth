@@ -73,7 +73,7 @@ def main(argv):
                 # build wall
                 cell_border[i][k] += 'down'
         # 5. building next or last row
-        if i != h - 1:
+        if not i == h - 1:
             # build next row
             # copy current row
             maze_multiplicity.append(maze_multiplicity[i].copy())
@@ -100,6 +100,8 @@ def main(argv):
                     index_s = cell_border[i][j].find('right')
                     if index_s != -1:
                         cell_border[i][j] = cell_border[i][j][index_s + len('right'):]
+            for j in range(w):
+                if j < w - 1:
                     # merge multiplicity
                     maze_multiplicity[i][j + 1] = maze_multiplicity[i][j]
 
