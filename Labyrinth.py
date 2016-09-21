@@ -1,5 +1,6 @@
 import argparse
 import random
+import time
 from BuildLabApi import build_maze
 
 def main(argv):
@@ -20,6 +21,7 @@ def main(argv):
     cell_border = [0]
     maze_multiplicity[0] = [0] * w
     cell_border[0] = [''] * w
+    start_time = time.time()
     # build labyrinth
     for i in range(h):
         # generate unique cell
@@ -112,7 +114,7 @@ def main(argv):
             cell_border[i][len(cell_border[i]) - 1] = 'right' + cell_border[i][len(cell_border[i]) - 1]
     # build maze
     build_maze(cell_border)
-
+    print('time: {}'.format(time.time() - start_time))
 if __name__ == "__main__":
     import sys
     main(sys.argv)
