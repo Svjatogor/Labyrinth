@@ -9,6 +9,7 @@ def main(argv):
     parser.add_argument("--w", type=int, default=8, help="width maze")
     parser.add_argument("--h", type=int, default=4, help="height maze")
     parser.add_argument("--seed", type=int, default=1, help="random key")
+    print(argv)
     args = parser.parse_args()
     w = args.w
     h = args.h
@@ -115,6 +116,7 @@ def main(argv):
     # build maze
     build_maze(cell_border)
     print('time: {}'.format(time.time() - start_time))
-if __name__ == "__main__":
-    import sys
-    main(sys.argv)
+
+# if __name__ == "__main__":
+#     import sys
+#     main(sys.argv)
