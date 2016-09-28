@@ -1,6 +1,7 @@
 import argparse
 import random
-from BuildLabApi import build_maze
+import time
+
 
 def main(argv):
     # parsing arguments
@@ -20,6 +21,7 @@ def main(argv):
     cell_border = [0]
     maze_multiplicity[0] = [0] * w
     cell_border[0] = [''] * w
+    start_run = time.time()
     # build labyrinth
     for i in range(h):
         # generate unique cell
@@ -105,14 +107,10 @@ def main(argv):
                 if j < w - 1:
                     # merge multiplicity
                     maze_multiplicity[i][j + 1] = maze_multiplicity[i][j]
+    print(time.time() - start_run)
     # add right border in last cell
     exit_row = random.randint(0, h - 1)
     for i in range(h):
         if i != exit_row:
             cell_border[i][len(cell_border[i]) - 1] = 'right' + cell_border[i][len(cell_border[i]) - 1]
-    # build maze
-    build_maze(cell_border)
-
-# if __name__ == "__main__":
-#     import sys
-#     main(sys.argv)
+    return cell_border
