@@ -122,11 +122,11 @@ def convert_maze_data_to_search(cell_border):
         elif row == len(cell_border) - 1:
             maze_matrix[row_in_matrix + 1] = [1] * (len(cell_border[row]) * 2 + 1)
         # add wall in row
-        for col in range(0, cell_border[row]):
+        for col in range(0, len(cell_border[row])):
             col_in_matrix = col * 2 + 1
             # add left and right borders
             if col == 0 or col == len(cell_border[row]) - 1:
-                maze_matrix[row_in_matrix][col_in_matrix] = 1
+                maze_matrix[row_in_matrix][col_in_matrix - 1] = 1
                 continue
             # add wall in mid
             maze_matrix[row_in_matrix + 1][col_in_matrix + 1] = 1;
