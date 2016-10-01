@@ -3,11 +3,11 @@ from Labyrinth import generate_maze_data
 import random
 from collections import OrderedDict
 import matplotlib.pyplot as plt
-import sys
+import math
 
 def calc_running_time():
     run_time = {}
-    interval = [i for i in range(4, 1000)]
+    interval = [i for i in range(4, 50)]
     for i in interval:
         random.seed(time.time())
         seed = random.random()
@@ -24,6 +24,10 @@ def calc_running_time():
         x.append(key)
         y.append(value)
     plt.plot(x, y, 'ro')
+    sqr_x = [math.sqrt(i) for i in y]
+    plt.plot(sqr_x, y, 'go')
+
+    nlogn_x = [i * math.log10(i) for i in y]
     plt.show()
 
 if __name__ == '__main__':
