@@ -17,16 +17,26 @@ class Maze:
         # 1. generate empty string
         # matrix for multiplicity that describe maze
         maze_multiplicity = [0]
-        # matrix walls
-        cell_border = [0]
         maze_multiplicity[0] = [0] * w
-        cell_border[0] = [''] * w
+        # matrix maze
+        matrix_maze = [0] * (h * 2 + 1)
+        # add up border
+        matrix_maze[0] = [1] * (w * 2 + 1)
+        # add down border
+        matrix_maze[len(matrix_maze) - 1] = [1] * (w * 2 + 1)
+        # add left and right borders
+        for i in range(1, h - 1):
+            matrix_maze[i] = [0] * (w * 2 + 1)
+            matrix_maze[i][0] = 1
+            matrix_maze[i][len(matrix_maze[i]) - 1] = 1
         # build labyrinth
         for i in range(h):
+            # index for maze
+            row_in_maze = i * 2 + 1
             # generate unique cell
             multiplicity_to_add = []
             for j in range(1, w + 1):
-                if not j in maze_multiplicity[i]:
+                if j not in maze_multiplicity[i]:
                     multiplicity_to_add.append(j)
             # 2. add unique multiplicity for empty cell
             for j in range(w):
@@ -36,15 +46,18 @@ class Maze:
                     multiplicity_to_add = multiplicity_to_add[1:]
             # 3. build right border
             for k in range(w - 1):
+                col_in_maze = k * 2 + 1
+                # add wall in mid
+                matrix_maze[row_in_maze + 1][col_in_maze + 1] = 1
                 # if current cell has same multiplicity as the right cell
                 if maze_multiplicity[i][k] == maze_multiplicity[i][k + 1]:
-                    cell_border[i][k] += 'right'
+                    matrix_maze[row_in_maze][col_in_maze + 1] = WALL
                     continue
                 # build the wall or not
                 rand_right = random.randint(0, 100)
                 if rand_right > 50:
                     # build wall
-                    cell_border[i][k] += 'right'
+                    matrix_maze[row_in_maze][col_in_maze + 1] = WALL
                 else:
                     # not building wall, merge multiplicity
                     maze_multiplicity[i][k + 1] = maze_multiplicity[i][k]
@@ -57,14 +70,16 @@ class Maze:
                 q = k - 1
                 while q >= 0 and maze_multiplicity[i][k] == maze_multiplicity[i][q]:
                     count_cell += 1
-                    if cell_border[i][q] == 'rightdown' or cell_border[i][q] == 'down':
+                    col_in_maze = q * 2 + 1
+                    if matrix_maze[row_in_maze + 1][col_in_maze] == 1:
                         down_count += 1
                     q -= 1
                 # right search
                 q = k + 1
                 while q < w and maze_multiplicity[i][k] == maze_multiplicity[i][q]:
                     count_cell += 1
-                    if cell_border[i][q] == 'rightdown' or cell_border[i][q] == 'down':
+                    col_in_maze = q * 2 + 1
+                    if matrix_maze[row_in_maze + 1][col_in_maze] == 1:
                         down_count += 1
                     q += 1
                 # if cell is not one or that build wall or not :)
@@ -73,35 +88,26 @@ class Maze:
                 rand_down = random.randint(0, 100)
                 if rand_down > 50:
                     # build wall
-                    cell_border[i][k] += 'down'
+                    matrix_maze[row_in_maze + 1][col_in_maze] = 1
             # 5. building next or last row
             if not i == h - 1:
                 # build next row
                 # copy current row
                 maze_multiplicity.append(maze_multiplicity[i].copy())
-                cell_border.append(cell_border[i].copy())
-                # delete right border
+                # delete wall with down wall
                 for j in range(w):
-                    index_s = cell_border[i + 1][j].find('right')
-                    if index_s != -1:
-                        cell_border[i + 1][j] = cell_border[i + 1][j][index_s + len('right'):]
-                # delete cell with down wall
-                for j in range(w):
-                    index_s = cell_border[i + 1][j].find('down')
-                    if index_s != -1:
+                    col_in_maze = j * w + 1
+                    if matrix_maze[row_in_maze + 1][col_in_maze] == WALL:
                         maze_multiplicity[i + 1][j] = 0
-                        cell_border[i + 1][j] = ''
             else:
                 # build last row
                 # build down wall
                 for j in range(w):
-                    if cell_border[i][j].find('down') == -1:
-                        cell_border[i][j] += 'down'
+                    col_in_maze = j * 2 + 1
                     # delete wall between multiplicity
                     if j != w - 1 and maze_multiplicity[i][j] != maze_multiplicity[i][j + 1]:
-                        index_s = cell_border[i][j].find('right')
-                        if index_s != -1:
-                            cell_border[i][j] = cell_border[i][j][index_s + len('right'):]
+                        if maze_multiplicity[row_in_maze][col_in_maze] == 1:
+                            maze_multiplicity[row_in_maze][col_in_maze] = 0
                 for j in range(w):
                     if j < w - 1:
                         # merge multiplicity
