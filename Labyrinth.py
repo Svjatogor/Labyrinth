@@ -136,8 +136,54 @@ def convert_maze_data_to_search(cell_border):
             # add down wall
             if cell_border[row][col].find('down') != -1:
                 maze_matrix[row_in_matrix + 1][col_in_matrix] = 1
-    return  maze_matrix
+    random.seed(time.time())
+    # make entry
+    entry = random.randint(0, len(maze_matrix) - 1)
+    while maze_matrix[entry][1] == 1:
+        entry = random.randint(0, len(maze_matrix) - 1)
+    maze_matrix[entry][0] = 0
+    return maze_matrix
 
-cell_borders = generate_maze_data(4, 4, time.time())
-build_maze(cell_borders)
-maze_matrix = convert_maze_data_to_search(cell_borders)
+def search_out(maze_matrix):
+    # search entry
+    index_entry = 0
+    while maze_matrix[index_entry][0] == 1:
+        index_entry += 1
+    # search exit
+    index_exit = 0
+    while maze_matrix[index_exit][len(maze_matrix[0] - 1)] == 1:
+        index_exit += 1
+    # stack for visited cells
+    stack_cells = []
+    exit_cell = [index_exit, len(maze_matrix[0] - 1)]
+    current_cell = [index_entry, 0]
+    # 1. mark the first cell as visits
+    maze_matrix[current_cell[0]][current_cell[1]] = 8
+    # 2. it has not yet  found a way
+    while current_cell != exit_cell:
+        # search neighbors
+        neighbors = []
+        # left neighbors
+        if current_cell[1] > 0:
+            if maze_matrix[current_cell[0]][current_cell[1] - 1] == 0:
+                neighbors.append([current_cell[0], current_cell[1] - 1])
+        # right
+        if current_cell[1] < len(maze_matrix[0]) - 1:
+            if maze_matrix[current_cell[0]][current_cell[1] + 1] == 0:
+                neighbors.append([current_cell[0], current_cell[1] + 1])
+        # up
+        if current_cell[0] > 0:
+            if maze_matrix[current_cell[0] - 1][current_cell[1]] == 0:
+                neighbors.append([current_cell[0] - 1, current_cell[1]])
+        # down
+        if current_cell[0] < len(maze_matrix) - 1:
+            if maze_matrix[current_cell[0] + 1][current_cell[1]] == 0:
+                neighbors.append([current_cell[0] + 1, current_cell[1]])
+        # 1. if the current cell has unvisited neighbors
+        if len(neighbors) != 0:
+            # 1. add the cell in stack
+            stack_cells.append(current_cell)
+            # 2. pick a random cells from neighbors
+            random.seed(time.time())
+            random_neighbors = random.randomint(0, len(neighbors) - 1)
+            

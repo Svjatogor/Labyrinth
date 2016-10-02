@@ -40,3 +40,12 @@ def build_maze(maze_plan):
         else:
             build_row(plan_row)
     print()
+
+def build_maze_from_matrix(maze_matrix):
+    for row in maze_matrix:
+        for element in row:
+            if element == 1:
+                print('* ', end='')
+            else:
+                print('  ', end='')
+        print()
