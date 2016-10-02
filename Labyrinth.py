@@ -151,11 +151,11 @@ def search_out(maze_matrix):
         index_entry += 1
     # search exit
     index_exit = 0
-    while maze_matrix[index_exit][len(maze_matrix[0] - 1)] == 1:
+    while maze_matrix[index_exit][len(maze_matrix[0]) - 1] == 1:
         index_exit += 1
     # stack for visited cells
     stack_cells = []
-    exit_cell = [index_exit, len(maze_matrix[0] - 1)]
+    exit_cell = [index_exit, len(maze_matrix[0]) - 1]
     current_cell = [index_entry, 0]
     # 1. mark the first cell as visits
     maze_matrix[current_cell[0]][current_cell[1]] = 8
@@ -185,16 +185,16 @@ def search_out(maze_matrix):
             stack_cells.append(current_cell)
             # 2. pick a random cells from neighbors
             random.seed(time.time())
-            random_neighbors = random.randomint(0, len(neighbors) - 1)
+            random_neighbors = random.randint(0, len(neighbors) - 1)
             # 3. make this cell current cell and mark it visited
-            current_cell = maze_matrix[neighbors[random_neighbors][0]][neighbors[random_neighbors][1]]
+            current_cell = [neighbors[random_neighbors][0], neighbors[random_neighbors][1]]
             maze_matrix[neighbors[random_neighbors][0]][neighbors[random_neighbors][1]] = 8
         # 2. if the stack is not empty
         elif len(stack_cells) != 0:
             # 1. pull cell of the stack
             cell_of_stack = stack_cells.pop()
             # 2. make this cell current
-            current_cell = maze_matrix[cell_of_stack[0]][cell_of_stack[1]]
+            current_cell = [cell_of_stack[0], cell_of_stack[1]]
         # 3. else there is not escape
         else:
             break
