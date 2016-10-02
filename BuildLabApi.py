@@ -45,9 +45,9 @@ def build_maze_from_matrix(maze_matrix):
     for row in maze_matrix:
         for element in row:
             if element == 1:
-                print('# ', end='')
+                print('* ', end='')
             elif element == 0:
                 print('  ', end='')
             elif element == 8:
-                print('*', end='')
+                print('. ', end='')
         print()
