@@ -25,7 +25,7 @@ class Maze:
         # add down border
         matrix_maze[len(matrix_maze) - 1] = [1] * (w * 2 + 1)
         # add left and right borders
-        for i in range(1, h - 1):
+        for i in range(1, len(matrix_maze) - 1):
             matrix_maze[i] = [0] * (w * 2 + 1)
             matrix_maze[i][0] = 1
             matrix_maze[i][len(matrix_maze[i]) - 1] = 1
@@ -47,17 +47,19 @@ class Maze:
             # 3. build right border
             for k in range(w - 1):
                 col_in_maze = k * 2 + 1
-                # add wall in mid
-                matrix_maze[row_in_maze + 1][col_in_maze + 1] = 1
                 # if current cell has same multiplicity as the right cell
                 if maze_multiplicity[i][k] == maze_multiplicity[i][k + 1]:
                     matrix_maze[row_in_maze][col_in_maze + 1] = WALL
+                    # add wall in mid
+                    matrix_maze[row_in_maze + 1][col_in_maze + 1] = 1
                     continue
                 # build the wall or not
                 rand_right = random.randint(0, 100)
                 if rand_right > 50:
                     # build wall
                     matrix_maze[row_in_maze][col_in_maze + 1] = WALL
+                    # add wall in mid
+                    matrix_maze[row_in_maze + 1][col_in_maze + 1] = 1
                 else:
                     # not building wall, merge multiplicity
                     maze_multiplicity[i][k + 1] = maze_multiplicity[i][k]
