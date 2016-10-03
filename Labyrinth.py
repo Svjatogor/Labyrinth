@@ -111,18 +111,14 @@ class Maze:
                     # delete wall between multiplicity
                     if j != w - 1 and maze_multiplicity[i][j] != maze_multiplicity[i][j + 1]:
                         col_in_maze = j * 2 + 1
-                        if maze_multiplicity[row_in_maze][col_in_maze + 1] == 1:
-                            maze_multiplicity[row_in_maze][col_in_maze] = 0
-                for j in range(w):
-                    if j < w - 1:
-                        # merge multiplicity
-                        maze_multiplicity[i][j + 1] = maze_multiplicity[i][j]
+                        if matrix_maze[row_in_maze][col_in_maze + 1] == 1:
+                            matrix_maze[row_in_maze][col_in_maze] = 0
+                            # merge multiplicity
+                            maze_multiplicity[i][j + 1] = maze_multiplicity[i][j]
         # add right border in last cell
         exit_row = random.randint(0, h - 1)
-        for i in range(h):
-            if i != exit_row:
-                exit_index = i * 2 + 1
-                matrix_maze[exit_index][len(matrix_maze[0]) - 1] = 0
+        exit_index = exit_row * 2 + 1
+        matrix_maze[exit_index][len(matrix_maze[0]) - 1] = 0
         return matrix_maze
 
     def convert_maze_data_to_search(self, cell_border):
