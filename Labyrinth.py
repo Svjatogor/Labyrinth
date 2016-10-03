@@ -101,7 +101,7 @@ class Maze:
                 maze_multiplicity.append(maze_multiplicity[i].copy())
                 # delete wall with down wall
                 for j in range(w):
-                    col_in_maze = j * w + 1
+                    col_in_maze = j * 2+ 1
                     if matrix_maze[row_in_maze + 1][col_in_maze] == WALL:
                         maze_multiplicity[i + 1][j] = 0
             else:
