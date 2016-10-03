@@ -116,8 +116,9 @@ class Maze:
         exit_row = random.randint(0, h - 1)
         for i in range(h):
             if i != exit_row:
-                cell_border[i][len(cell_border[i]) - 1] = 'right' + cell_border[i][len(cell_border[i]) - 1]
-        return cell_border
+                exit_index = i * 2 + 1
+                matrix_maze[exit_index][len(matrix_maze[0]) - 1] = 0
+        return matrix_maze
 
     def convert_maze_data_to_search(cell_border):
         # convert from data for border matrix cells and borders
