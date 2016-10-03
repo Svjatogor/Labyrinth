@@ -115,9 +115,11 @@ class Maze:
                             matrix_maze[row_in_maze][col_in_maze + 1] = 0
                             # merge multiplicity
                             maze_multiplicity[i][j + 1] = maze_multiplicity[i][j]
-        # add right border in last cell
-        exit_row = random.randint(0, h - 1)
-        exit_index = exit_row * 2 + 1
+        # add entry
+        entry_index = random.randint(0, h - 1) * 2 + 1
+        matrix_maze[entry_index][0] = 0
+        # add out
+        exit_index = random.randint(0, h - 1) * 2 + 1
         matrix_maze[exit_index][len(matrix_maze[0]) - 1] = 0
         return matrix_maze
 

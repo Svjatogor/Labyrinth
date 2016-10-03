@@ -7,8 +7,8 @@ import random
 def main(argv):
     # parsing arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--w", type=int, default=4, help="width maze")
-    parser.add_argument("--h", type=int, default=4, help="height maze")
+    parser.add_argument("--w", type=int, default=12, help="width maze")
+    parser.add_argument("--h", type=int, default=12, help="height maze")
     parser.add_argument("--seed", type=int, default=random.random(), help="random key")
     args = parser.parse_args()
     w = args.w
