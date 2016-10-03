@@ -121,43 +121,6 @@ class Maze:
         matrix_maze[exit_index][len(matrix_maze[0]) - 1] = 0
         return matrix_maze
 
-    def convert_maze_data_to_search(self, cell_border):
-        # convert from data for border matrix cells and borders
-        maze_matrix = [0] * (len(cell_border) * 2 + 1)
-        # init empty maze
-        for row in range(0, len(maze_matrix)):
-            maze_matrix[row] = [0] * (len(cell_border[0]) * 2 + 1)
-        # add walls
-        for row in range(0, len(cell_border)):
-            row_in_matrix = row * 2 + 1
-            # add up and down borders
-            if row == 0:
-                maze_matrix[row_in_matrix - 1] = [1] * (len(cell_border[row]) * 2 + 1)
-            elif row == len(cell_border) - 1:
-                maze_matrix[row_in_matrix + 1] = [1] * (len(cell_border[row]) * 2 + 1)
-            # add wall in row
-            for col in range(0, len(cell_border[row])):
-                col_in_matrix = col * 2 + 1
-                # add left and right borders
-                if col == 0:
-                    maze_matrix[row_in_matrix][col_in_matrix - 1] = 1
-                    maze_matrix[row_in_matrix - 1][col_in_matrix - 1] = 1
-                # add wall in mid
-                maze_matrix[row_in_matrix + 1][col_in_matrix + 1] = 1
-                # add right wall
-                if cell_border[row][col].find('right') != -1:
-                    maze_matrix[row_in_matrix][col_in_matrix + 1] = 1
-                # add down wall
-                if cell_border[row][col].find('down') != -1:
-                    maze_matrix[row_in_matrix + 1][col_in_matrix] = 1
-        random.seed(time.time())
-        # make entry
-        entry = random.randint(0, len(maze_matrix) - 1)
-        while maze_matrix[entry][1] == 1:
-            entry = random.randint(0, len(maze_matrix) - 1)
-        maze_matrix[entry][0] = 0
-        return maze_matrix
-
     def search_out(self, maze):
         way = []
         maze_matrix = []
