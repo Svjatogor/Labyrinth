@@ -120,7 +120,7 @@ class Maze:
                 matrix_maze[exit_index][len(matrix_maze[0]) - 1] = 0
         return matrix_maze
 
-    def convert_maze_data_to_search(cell_border):
+    def convert_maze_data_to_search(self, cell_border):
         # convert from data for border matrix cells and borders
         maze_matrix = [0] * (len(cell_border) * 2 + 1)
         # init empty maze
@@ -157,7 +157,7 @@ class Maze:
         maze_matrix[entry][0] = 0
         return maze_matrix
 
-    def search_out(maze):
+    def search_out(self, maze):
         way = []
         maze_matrix = []
         for row in maze:
@@ -222,9 +222,9 @@ class Maze:
             way[cell[0]][cell[1]] = 8
         return way
 
-    def way_filter(maze):
+    def way_filter(self, maze):
         # search first way
-        first_way = search_out(maze)
+        first_way = self.search_out(maze)
         # search unvisited neighbors
         neighbors = []
         for cell in first_way:

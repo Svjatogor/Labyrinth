@@ -1,7 +1,8 @@
-from Labyrinth import *
+from Labyrinth import Maze
 from BuildLabApi import *
 import argparse
 import sys
+import random
 
 def main(argv):
     # parsing arguments
@@ -13,15 +14,8 @@ def main(argv):
     w = args.w
     h = args.h
     seed = args.seed
-    cell_border = generate_maze_data(w, h, seed)
-    maze_matrix = convert_maze_data_to_search(cell_border)
-    print("Maze")
-    build_maze_from_matrix(maze_matrix)
-    way = search_out(maze_matrix)
-    print("All way")
-    build_maze_from_matrix(maze_matrix)
-    print("Right way")
-    build_maze_from_matrix(way)
+    maze = Maze(w, h, seed)
+    maze_matrix = maze.generate_maze_data(w, h, seed)
 
 
 if __name__ == "__main__":
