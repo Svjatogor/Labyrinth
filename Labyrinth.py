@@ -11,6 +11,9 @@ class Maze:
         self.h = h
         self.seed = seed
         self.maze = None
+        self.maze_visited = []
+        self.cells_for_way = []
+        self.way = []
 
     def generate_maze_data(self, w, h, seed):
         random.seed(seed)
@@ -121,47 +124,49 @@ class Maze:
         # add out
         exit_index = random.randint(0, h - 1) * 2 + 1
         matrix_maze[exit_index][len(matrix_maze[0]) - 1] = 0
+        self.maze = matrix_maze
         return matrix_maze
 
-    def search_out(self, maze):
+    def search_out(self, maze=None):
+        if maze is None:
+            maze = self.maze
         way = []
-        maze_matrix = []
         for row in maze:
             way.append(list(row))
-            maze_matrix.append(list(row))
+            self.maze_visited.append(list(row))
         # search entry
         index_entry = 0
-        while maze_matrix[index_entry][0] == 1:
+        while self.maze_visited[index_entry][0] == 1:
             index_entry += 1
         # search exit
         index_exit = 0
-        while maze_matrix[index_exit][len(maze_matrix[0]) - 1] == 1:
+        while self.maze_visited[index_exit][len(self.maze_visited[0]) - 1] == 1:
             index_exit += 1
         # stack for visited cells
         stack_cells = []
-        exit_cell = [index_exit, len(maze_matrix[0]) - 1]
+        exit_cell = [index_exit, len(self.maze_visited[0]) - 1]
         current_cell = [index_entry, 0]
         # 1. mark the first cell as visits
-        maze_matrix[current_cell[0]][current_cell[1]] = 8
+        self.maze_visited[current_cell[0]][current_cell[1]] = 8
         # 2. it has not yet  found a way
         while current_cell != exit_cell:
             # search neighbors
             neighbors = []
             # left neighbors
             if current_cell[1] > 0:
-                if maze_matrix[current_cell[0]][current_cell[1] - 1] == 0:
+                if self.maze_visited[current_cell[0]][current_cell[1] - 1] == 0:
                     neighbors.append([current_cell[0], current_cell[1] - 1])
             # right
-            if current_cell[1] < len(maze_matrix[0]) - 1:
-                if maze_matrix[current_cell[0]][current_cell[1] + 1] == 0:
+            if current_cell[1] < len(self.maze_visited[0]) - 1:
+                if self.maze_visited[current_cell[0]][current_cell[1] + 1] == 0:
                     neighbors.append([current_cell[0], current_cell[1] + 1])
             # up
             if current_cell[0] > 0:
-                if maze_matrix[current_cell[0] - 1][current_cell[1]] == 0:
+                if self.maze_visited[current_cell[0] - 1][current_cell[1]] == 0:
                     neighbors.append([current_cell[0] - 1, current_cell[1]])
             # down
-            if current_cell[0] < len(maze_matrix) - 1:
-                if maze_matrix[current_cell[0] + 1][current_cell[1]] == 0:
+            if current_cell[0] < len(self.maze_visited) - 1:
+                if self.maze_visited[current_cell[0] + 1][current_cell[1]] == 0:
                     neighbors.append([current_cell[0] + 1, current_cell[1]])
             # 1. if the current cell has unvisited neighbors
             if len(neighbors) != 0:
@@ -172,7 +177,7 @@ class Maze:
                 random_neighbors = random.randint(0, len(neighbors) - 1)
                 # 3. make this cell current cell and mark it visited
                 current_cell = [neighbors[random_neighbors][0], neighbors[random_neighbors][1]]
-                maze_matrix[neighbors[random_neighbors][0]][neighbors[random_neighbors][1]] = 8
+                self.maze_visited[neighbors[random_neighbors][0]][neighbors[random_neighbors][1]] = 8
             # 2. if the stack is not empty
             elif len(stack_cells) != 0:
                 # 1. pull cell of the stack
@@ -182,11 +187,14 @@ class Maze:
             # 3. else there is not escape
             else:
                 return None
+        self.cells_for_way = stack_cells
+        return self.maze_visited
+
+    def get_way(self):
         # draw way
-        for cell in stack_cells:
+        for cell in self.cells_for_way:
             # add cell in way
-            way[cell[0]][cell[1]] = 8
-        return way
+            self.way[cell[0]][cell[1]] = 8
 
     def way_filter(self, maze):
         # search first way
