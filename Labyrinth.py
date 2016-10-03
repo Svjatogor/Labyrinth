@@ -90,7 +90,10 @@ class Maze:
                 rand_down = random.randint(0, 100)
                 if rand_down > 50:
                     # build wall
+                    col_in_maze = k * 2 + 1
                     matrix_maze[row_in_maze + 1][col_in_maze] = 1
+                    # add wall in mid
+                    matrix_maze[row_in_maze + 1][col_in_maze - 1] = 1
             # 5. building next or last row
             if not i == h - 1:
                 # build next row

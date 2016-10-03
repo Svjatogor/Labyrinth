@@ -18,6 +18,7 @@ def main(argv):
     maze_matrix = maze.generate_maze_data(w, h, seed)
 
 
+
 if __name__ == "__main__":
     main(sys.argv)
 
