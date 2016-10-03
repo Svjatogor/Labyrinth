@@ -100,9 +100,9 @@ class Maze:
                 # copy current row
                 maze_multiplicity.append(maze_multiplicity[i].copy())
                 # delete wall with down wall
-                for j in range(w):
+                for j in range(w - 1):
                     col_in_maze = j * 2 + 1
-                    if matrix_maze[row_in_maze + 1][col_in_maze] == WALL:
+                    if matrix_maze[row_in_maze + 1][col_in_maze + 1] == WALL:
                         maze_multiplicity[i + 1][j] = 0
             else:
                 # build last row
