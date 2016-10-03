@@ -93,16 +93,16 @@ class Maze:
                     col_in_maze = k * 2 + 1
                     matrix_maze[row_in_maze + 1][col_in_maze] = 1
                     # add wall in mid
-                    matrix_maze[row_in_maze + 1][col_in_maze - 1] = 1
+                    matrix_maze[row_in_maze + 1][col_in_maze + 1] = 1
             # 5. building next or last row
             if not i == h - 1:
                 # build next row
                 # copy current row
                 maze_multiplicity.append(maze_multiplicity[i].copy())
                 # delete wall with down wall
-                for j in range(w - 1):
+                for j in range(w):
                     col_in_maze = j * 2 + 1
-                    if matrix_maze[row_in_maze + 1][col_in_maze + 1] == WALL:
+                    if matrix_maze[row_in_maze + 1][col_in_maze] == WALL:
                         maze_multiplicity[i + 1][j] = 0
             else:
                 # build last row
@@ -112,7 +112,7 @@ class Maze:
                     if j != w - 1 and maze_multiplicity[i][j] != maze_multiplicity[i][j + 1]:
                         col_in_maze = j * 2 + 1
                         if matrix_maze[row_in_maze][col_in_maze + 1] == 1:
-                            matrix_maze[row_in_maze][col_in_maze] = 0
+                            matrix_maze[row_in_maze][col_in_maze + 1] = 0
                             # merge multiplicity
                             maze_multiplicity[i][j + 1] = maze_multiplicity[i][j]
         # add right border in last cell
