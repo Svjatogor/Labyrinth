@@ -14,6 +14,7 @@ class Maze:
         self.maze_visited = []
         self.cells_for_way = []
         self.way = []
+        self.ways = []
 
     def generate_maze_data(self, w, h, seed):
         random.seed(seed)
@@ -153,23 +154,7 @@ class Maze:
         # 2. it has not yet  found a way
         while current_cell != exit_cell:
             # search neighbors
-            neighbors = []
-            # left neighbors
-            if current_cell[1] > 0:
-                if self.maze_visited[current_cell[0]][current_cell[1] - 1] == 0:
-                    neighbors.append([current_cell[0], current_cell[1] - 1])
-            # right
-            if current_cell[1] < len(self.maze_visited[0]) - 1:
-                if self.maze_visited[current_cell[0]][current_cell[1] + 1] == 0:
-                    neighbors.append([current_cell[0], current_cell[1] + 1])
-            # up
-            if current_cell[0] > 0:
-                if self.maze_visited[current_cell[0] - 1][current_cell[1]] == 0:
-                    neighbors.append([current_cell[0] - 1, current_cell[1]])
-            # down
-            if current_cell[0] < len(self.maze_visited) - 1:
-                if self.maze_visited[current_cell[0] + 1][current_cell[1]] == 0:
-                    neighbors.append([current_cell[0] + 1, current_cell[1]])
+            neighbors = self.get_neighbors(self.maze_visited, current_cell)
             # 1. if the current cell has unvisited neighbors
             if len(neighbors) != 0:
                 # 1. add the cell in stack
@@ -193,7 +178,7 @@ class Maze:
         self.cells_for_way.append(exit_cell)
         return self.maze_visited
 
-    def get_way(self):
+    def get_way(self, index):
         if len(self.way) == 0:
             for row in self.maze:
                 self.way.append(list(row))
@@ -201,29 +186,36 @@ class Maze:
             for cell in self.cells_for_way:
                 # add cell in way
                 self.way[cell[0]][cell[1]] = 8
-        return self.way
+            self.ways.append(self.way)
+        return self.ways[index]
 
     def way_filter(self, maze):
         # search first way
-        first_way = self.search_out(maze)
+        first_way = self.get_way()
         # search unvisited neighbors
         neighbors = []
-        for cell in first_way:
-            # left neighbors
-            if cell[1] > 0:
-                if maze[cell[0]][cell[1] - 1] == 0:
-                    neighbors.append([cell[0], cell[1] - 1])
-            # right
-            if cell[1] < len(maze[0]) - 1:
-                if maze[cell[0]][cell[1] + 1] == 0:
-                    neighbors.append([cell[0], cell[1] + 1])
-            # up
-            if cell[0] > 0:
-                if maze[cell[0] - 1][cell[1]] == 0:
-                    neighbors.append([cell[0] - 1, cell[1]])
-            # down
-            if cell[0] < len(maze) - 1:
-                if maze[cell[0] + 1][cell[1]] == 0:
-                    neighbors.append([cell[0] + 1, cell[1]])
+        for cell in range(0, len(first_way)):
+            # generate new way (its last cell and +1)
+            new_way = first_way[:cell + 1]
 
-    
+
+
+    def get_neighbors(self, maze_visited, current_cell):
+        neighbors = []
+        # left neighbors
+        if current_cell[1] > 0:
+            if self.maze_visited[current_cell[0]][current_cell[1] - 1] == 0:
+                neighbors.append([current_cell[0], current_cell[1] - 1])
+        # right
+        if current_cell[1] < len(self.maze_visited[0]) - 1:
+            if self.maze_visited[current_cell[0]][current_cell[1] + 1] == 0:
+                neighbors.append([current_cell[0], current_cell[1] + 1])
+        # up
+        if current_cell[0] > 0:
+            if self.maze_visited[current_cell[0] - 1][current_cell[1]] == 0:
+                neighbors.append([current_cell[0] - 1, current_cell[1]])
+        # down
+        if current_cell[0] < len(self.maze_visited) - 1:
+            if self.maze_visited[current_cell[0] + 1][current_cell[1]] == 0:
+                neighbors.append([current_cell[0] + 1, current_cell[1]])
+        return neighbors
