@@ -1,6 +1,5 @@
 import random
 import time
-import copy as cp
 
 CELL = 0
 WALL = 1
@@ -132,29 +131,34 @@ class Maze:
         self.maze = matrix_maze
         return matrix_maze
 
-    def search_out(self, maze=None):
+    def search_out(self, maze=None, start_cell=None, out_cell=None):
         if maze is None:
             maze = self.maze
+        maze_visited = []
         for row in maze:
-            self.maze_visited.append(list(row))
-        # search entry
-        index_entry = 0
-        while self.maze_visited[index_entry][0] == 1:
-            index_entry += 1
-        # search exit
-        index_exit = 0
-        while self.maze_visited[index_exit][len(self.maze_visited[0]) - 1] == 1:
-            index_exit += 1
+            maze_visited.append(list(row))
+        if start_cell is None:
+            # search entry
+            index_entry = 0
+            while maze_visited[index_entry][0] == 1:
+                index_entry += 1
+            start_cell = [0, index_entry]
+        if out_cell is None:
+            # search exit
+            index_exit = 0
+            while maze_visited[index_exit][len(maze_visited[0]) - 1] == 1:
+                index_exit += 1
+            out_cell = [index_exit, len(maze[0]) - 1]
         # stack for visited cells
         stack_cells = []
-        exit_cell = [index_exit, len(self.maze_visited[0]) - 1]
-        current_cell = [index_entry, 0]
+        exit_cell = out_cell
+        current_cell = start_cell
         # 1. mark the first cell as visits
-        self.maze_visited[current_cell[0]][current_cell[1]] = 8
+        maze_visited[current_cell[0]][current_cell[1]] = 8
         # 2. it has not yet  found a way
         while current_cell != exit_cell:
             # search neighbors
-            neighbors = self.get_neighbors(self.maze_visited, current_cell)
+            neighbors = self.get_neighbors(maze_visited, current_cell)
             # 1. if the current cell has unvisited neighbors
             if len(neighbors) != 0:
                 # 1. add the cell in stack
@@ -164,7 +168,7 @@ class Maze:
                 random_neighbors = random.randint(0, len(neighbors) - 1)
                 # 3. make this cell current cell and mark it visited
                 current_cell = [neighbors[random_neighbors][0], neighbors[random_neighbors][1]]
-                self.maze_visited[neighbors[random_neighbors][0]][neighbors[random_neighbors][1]] = 8
+                maze_visited[neighbors[random_neighbors][0]][neighbors[random_neighbors][1]] = 8
             # 2. if the stack is not empty
             elif len(stack_cells) != 0:
                 # 1. pull cell of the stack
@@ -173,49 +177,59 @@ class Maze:
                 current_cell = [cell_of_stack[0], cell_of_stack[1]]
             # 3. else there is not escape
             else:
-                return None
-        self.cells_for_way = stack_cells
-        self.cells_for_way.append(exit_cell)
-        return self.maze_visited
+                return None, None
+        # add last cell
+        stack_cells.append(exit_cell)
+        return maze_visited, stack_cells
 
-    def get_way(self, index):
-        if len(self.way) == 0:
-            for row in self.maze:
-                self.way.append(list(row))
-            # draw way
-            for cell in self.cells_for_way:
-                # add cell in way
-                self.way[cell[0]][cell[1]] = 8
-            self.ways.append(self.way)
-        return self.ways[index]
+    def get_way(self, maze, cells):
+        way = []
+        for row in maze:
+            way.append(list(row))
+        # draw way
+        for cell in cells:
+            # add cell in way
+            way[cell[0]][cell[1]] = 8
+        return way
 
     def way_filter(self, maze):
+        ways = []
         # search first way
-        first_way = self.get_way()
-        # search unvisited neighbors
-        neighbors = []
-        for cell in range(0, len(first_way)):
-            # generate new way (its last cell and +1)
-            new_way = first_way[:cell + 1]
-
+        _, cells = self.search_out()
+        way = self.get_way(self.maze, cells)
+        ways.append({'way': way, 'cells': cells, 'maze': maze})
+        for cell in range(0, len(ways[0]['cells'])):
+            # generate new way (its current cell and +1)
+            new_way = ways[0]['cells'][:cell + 1]
+            # search new way of current cell
+            _, cells = self.search_out(self.maze, new_way[-1:-2])
+            if cells is not None:
+                way = self.get_way(self.maze, cells)
+                ways.append({'way': way, 'cells': cells})
 
 
     def get_neighbors(self, maze_visited, current_cell):
         neighbors = []
         # left neighbors
         if current_cell[1] > 0:
-            if self.maze_visited[current_cell[0]][current_cell[1] - 1] == 0:
+            if maze_visited[current_cell[0]][current_cell[1] - 1] == 0:
                 neighbors.append([current_cell[0], current_cell[1] - 1])
         # right
-        if current_cell[1] < len(self.maze_visited[0]) - 1:
-            if self.maze_visited[current_cell[0]][current_cell[1] + 1] == 0:
+        if current_cell[1] < len(maze_visited[0]) - 1:
+            if maze_visited[current_cell[0]][current_cell[1] + 1] == 0:
                 neighbors.append([current_cell[0], current_cell[1] + 1])
         # up
         if current_cell[0] > 0:
-            if self.maze_visited[current_cell[0] - 1][current_cell[1]] == 0:
+            if maze_visited[current_cell[0] - 1][current_cell[1]] == 0:
                 neighbors.append([current_cell[0] - 1, current_cell[1]])
         # down
-        if current_cell[0] < len(self.maze_visited) - 1:
-            if self.maze_visited[current_cell[0] + 1][current_cell[1]] == 0:
+        if current_cell[0] < len(maze_visited) - 1:
+            if maze_visited[current_cell[0] + 1][current_cell[1]] == 0:
                 neighbors.append([current_cell[0] + 1, current_cell[1]])
         return neighbors
+
+    def maze_clone(self):
+        maze_copy = [];
+        for row in self.maze:
+            maze_copy.append(list(row))
+        return maze_copy

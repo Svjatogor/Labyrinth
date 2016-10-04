@@ -19,10 +19,10 @@ def main(argv):
     maze_matrix = maze.generate_maze_data(w, h, seed)
     build_maze_from_matrix(maze_matrix)
     print("Search out")
-    maze_visited = maze.search_out()
+    maze_visited, cells = maze.search_out()
     build_maze_from_matrix(maze_visited)
     print("Way")
-    way = maze.get_way()
+    way = maze.get_way(maze_matrix, cells)
     build_maze_from_matrix(way)
 
 if __name__ == "__main__":
