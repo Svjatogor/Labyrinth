@@ -18,12 +18,16 @@ def main(argv):
     print("Maze")
     maze_matrix = maze.generate_maze_data(w, h, seed)
     build_maze_from_matrix(maze_matrix)
-    print("Search out")
-    maze_visited, cells = maze.search_out()
-    build_maze_from_matrix(maze_visited)
     print("Way")
-    way = maze.get_way(maze_matrix, cells)
-    build_maze_from_matrix(way)
+    # way = maze.get_way(maze_matrix, cells)
+    # build_maze_from_matrix(way)
+    print("Optimaze maze")
+    ways = maze.way_filter()
+    for way in ways:
+        print("way {}".format(way['n']))
+        build_maze_from_matrix(way['way'])
+        print("new maze")
+
 
 if __name__ == "__main__":
     main(sys.argv)
