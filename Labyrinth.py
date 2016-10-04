@@ -194,10 +194,13 @@ class Maze:
 
     def way_filter(self, maze):
         ways = []
+        mazes = []
         # search first way
         _, cells = self.search_out()
+        first_cells = cells
         way = self.get_way(self.maze, cells)
         ways.append({'way': way, 'cells': cells, 'maze': maze})
+        mazes.append(self.maze)
         for cell in range(0, len(ways[0]['cells'])):
             # generate new way (its current cell and +1)
             new_way = ways[0]['cells'][:cell + 1]
@@ -205,8 +208,23 @@ class Maze:
             _, cells = self.search_out(self.maze, new_way[-1:-2])
             if cells is not None:
                 way = self.get_way(self.maze, cells)
-                ways.append({'way': way, 'cells': cells})
-
+                # change maze, add wall and block way
+                # choose cell for block
+                indexes_for_choose = []
+                maze = mazes[len(mazes) - 1]
+                for i in range(0, len(first_cells)):
+                    if cells[i] is not first_cells:
+                        indexes_for_choose.append(i)
+                index_block_cell = random.randint(0, len(indexes_for_choose) - 1)
+                # if horizontal step
+                if cells[index_block_cell][0] == cells[index_block_cell + 1][0]:
+                    # build vertical wall
+                    maze[cells[index_block_cell][0]][cells[index_block_cell][1] + 1] = 1
+                # else it was vertical step
+                else:
+                    maze[cells[index_block_cell][0] + 1][cells[index_block_cell][1]] = 1
+                ways.append({'way': way, 'cells': cells, 'maze': maze})
+                mazes.append(maze)
 
     def get_neighbors(self, maze_visited, current_cell):
         neighbors = []
