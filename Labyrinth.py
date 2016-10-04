@@ -118,6 +118,10 @@ class Maze:
                             matrix_maze[row_in_maze][col_in_maze + 1] = 0
                             # merge multiplicity
                             maze_multiplicity[i][j + 1] = maze_multiplicity[i][j]
+        # add point in prohibited cell
+        for i in range(2, h * 2, 2):
+            for j in range(2, w * 2, 2):
+                matrix_maze[i][j] = 1
         # add entry
         entry_index = random.randint(0, h - 1) * 2 + 1
         matrix_maze[entry_index][0] = 0
@@ -130,9 +134,7 @@ class Maze:
     def search_out(self, maze=None):
         if maze is None:
             maze = self.maze
-        way = []
         for row in maze:
-            way.append(list(row))
             self.maze_visited.append(list(row))
         # search entry
         index_entry = 0
@@ -188,13 +190,18 @@ class Maze:
             else:
                 return None
         self.cells_for_way = stack_cells
+        self.cells_for_way.append(exit_cell)
         return self.maze_visited
 
     def get_way(self):
-        # draw way
-        for cell in self.cells_for_way:
-            # add cell in way
-            self.way[cell[0]][cell[1]] = 8
+        if len(self.way) == 0:
+            for row in self.maze:
+                self.way.append(list(row))
+            # draw way
+            for cell in self.cells_for_way:
+                # add cell in way
+                self.way[cell[0]][cell[1]] = 8
+        return self.way
 
     def way_filter(self, maze):
         # search first way
@@ -218,3 +225,5 @@ class Maze:
             if cell[0] < len(maze) - 1:
                 if maze[cell[0] + 1][cell[1]] == 0:
                     neighbors.append([cell[0] + 1, cell[1]])
+
+    
