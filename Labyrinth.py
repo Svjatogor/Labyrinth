@@ -203,33 +203,45 @@ class Maze:
         way = self.get_way(self.maze, cells)
         ways.append({'n': 1, 'way': way, 'cells': cells, 'maze': maze})
         mazes.append(self.maze)
+        evalution_maze = self.maze_clone()
         for cell in range(0, len(ways[0]['cells'])):
             # generate new way (its current cell and +1)
             new_way = ways[0]['cells'][:cell + 2]
+            maze_to_steps = [list(i) for i in evalution_maze]
+            maze_to_steps = self.get_way(maze_to_steps, new_way)
             # search new way of current cell
-            _, cells = self.search_out(mazes[len(mazes) - 1], new_way[len(new_way) - 2])
+            _, cells = self.search_out(maze_to_steps, new_way[len(new_way) - 2])
             if cells is not None:
-                way = self.get_way(self.maze, cells)
+                cells = new_way[0:len(new_way) - 2] + cells
+                way = self.get_way(evalution_maze, cells)
                 # change maze, add wall and block way
                 # choose cell for block
                 indexes_for_choose = []
-                maze = mazes[len(mazes) - 1]
                 for i in range(0, len(cells)):
-                    equivalent_cells = [item for item in first_cells if item == cells[i]]
-                    if len(equivalent_cells) == 0:
+                    add_cell = True
+                    for item in first_cells:
+                        if item == cells[i]:
+                            add_cell = False
+                            break
+                    if add_cell:
                         indexes_for_choose.append(i)
                 if len(indexes_for_choose) != 0:
                     index_block_cell = random.randint(0, len(indexes_for_choose) - 1)
-                    # if horizontal step
-                    if cells[indexes_for_choose[index_block_cell]][0] == cells[indexes_for_choose[index_block_cell] + 1][0]:
-                        # build vertical wall
-                        maze[cells[index_block_cell][0]][cells[index_block_cell][1] + 1] = 1
-                    # else it was vertical step
-                    else:
-                        maze[cells[index_block_cell][0] + 1][cells[index_block_cell][1]] = 1
-                    ways.append({'n': cell + 1, 'way': way, 'cells': cells, 'maze': maze})
-                    mazes.append(maze)
+                    block_row = cells[indexes_for_choose[index_block_cell]][0]
+                    block_column = cells[indexes_for_choose[index_block_cell]][1]
+                    # build block wall
+                    evalution_maze[block_row][block_column] = 1
+                    ways.append({'n': cell, 'way': way, 'cells': cells, 'maze': evalution_maze})
+                    mazes.append(evalution_maze)
         return ways
+
+    def great_way_filter(self):
+        _, grand_cells = self.search_out()
+        grand_way = self.get_way(self.maze, grand_cells)
+        for i in range(0, len(grand_cells)):
+            cells_travelend = grand_cells[:len(grand_cells) - 1]
+
+
 
     def get_neighbors(self, maze_visited, current_cell):
         neighbors = []
