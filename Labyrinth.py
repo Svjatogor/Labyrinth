@@ -241,8 +241,6 @@ class Maze:
         for i in range(0, len(grand_cells)):
             cells_travelend = grand_cells[:len(grand_cells) - 1]
 
-
-
     def get_neighbors(self, maze_visited, current_cell):
         neighbors = []
         # left neighbors
