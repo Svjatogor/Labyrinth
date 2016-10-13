@@ -1,5 +1,5 @@
 import time
-from Labyrinth import generate_maze_data
+from Labyrinth import Maze
 import random
 from collections import OrderedDict
 import matplotlib.pyplot as plt
@@ -7,13 +7,14 @@ import math
 
 def calc_running_time():
     run_time = {}
-    interval = [i for i in range(4, 50)]
+    interval = [i for i in range(4, 1000)]
     for i in interval:
         random.seed(time.time())
         seed = random.random()
         start_time = time.time()
+        maze = Maze(i, i, i)
         # start generate maze
-        generate_maze_data(i, i, seed)
+        maze.generate_maze_data(i, i, seed)
         running_time = time.time() - start_time
         run_time[i] = running_time * 1000
         print(i)

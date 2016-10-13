@@ -4,6 +4,7 @@ import time
 CELL = 0
 WALL = 1
 
+
 class Maze:
     def __init__(self, w, h, seed):
         self.w = w
@@ -123,10 +124,10 @@ class Maze:
             for j in range(2, w * 2, 2):
                 matrix_maze[i][j] = 1
         # add entry
-        entry_index = random.randint(0, h - 1) * 2 + 1
+        entry_index = random.randint(1, h - 2) * 2 + 1
         matrix_maze[entry_index][0] = 0
         # add out
-        exit_index = random.randint(0, h - 1) * 2 + 1
+        exit_index = random.randint(1, h - 2) * 2 + 1
         matrix_maze[exit_index][len(matrix_maze[0]) - 1] = 0
         self.maze = matrix_maze
         return matrix_maze
@@ -142,7 +143,7 @@ class Maze:
             index_entry = 0
             while maze_visited[index_entry][0] == 1:
                 index_entry += 1
-            start_cell = [1, index_entry]
+            start_cell = [index_entry, 0]
         if out_cell is None:
             # search exit
             index_exit = 0
@@ -203,17 +204,17 @@ class Maze:
         way = self.get_way(self.maze, cells)
         ways.append({'n': 1, 'way': way, 'cells': cells, 'maze': maze})
         mazes.append(self.maze)
-        evalution_maze = self.maze_clone()
+        evaluation_maze = self.maze_clone()
         for cell in range(0, len(ways[0]['cells'])):
             # generate new way (its current cell and +1)
             new_way = ways[0]['cells'][:cell + 2]
-            maze_to_steps = [list(i) for i in evalution_maze]
+            maze_to_steps = [list(i) for i in evaluation_maze]
             maze_to_steps = self.get_way(maze_to_steps, new_way)
             # search new way of current cell
             _, cells = self.search_out(maze_to_steps, new_way[len(new_way) - 2])
             if cells is not None:
                 cells = new_way[0:len(new_way) - 2] + cells
-                way = self.get_way(evalution_maze, cells)
+                way = self.get_way(evaluation_maze, cells)
                 # change maze, add wall and block way
                 # choose cell for block
                 indexes_for_choose = []
@@ -230,9 +231,9 @@ class Maze:
                     block_row = cells[indexes_for_choose[index_block_cell]][0]
                     block_column = cells[indexes_for_choose[index_block_cell]][1]
                     # build block wall
-                    evalution_maze[block_row][block_column] = 1
-                    ways.append({'n': cell, 'way': way, 'cells': cells, 'maze': evalution_maze})
-                    mazes.append(evalution_maze)
+                    evaluation_maze[block_row][block_column] = 1
+                    ways.append({'n': cell, 'way': way, 'cells': cells, 'maze': evaluation_maze})
+                    mazes.append(evaluation_maze)
         return ways
 
     def great_way_filter(self):
