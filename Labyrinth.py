@@ -202,9 +202,10 @@ class Maze:
         _, cells = self.search_out()
         first_cells = cells
         way = self.get_way(self.maze, cells)
-        ways.append({'n': 1, 'way': way, 'cells': cells, 'maze': maze})
+        ways.append({'n': 0, 'way': way, 'cells': cells, 'maze': maze})
         mazes.append(self.maze)
         evaluation_maze = self.maze_clone()
+        index_way = 0
         for cell in range(0, len(ways[0]['cells'])):
             # generate new way (its current cell and +1)
             new_way = ways[0]['cells'][:cell + 2]
@@ -232,7 +233,8 @@ class Maze:
                     block_column = cells[indexes_for_choose[index_block_cell]][1]
                     # build block wall
                     evaluation_maze[block_row][block_column] = 1
-                    ways.append({'n': cell, 'way': way, 'cells': cells, 'maze': evaluation_maze})
+                    index_way += 1
+                    ways.append({'n': index_way, 'way': way, 'cells': cells, 'maze': evaluation_maze})
                     mazes.append(evaluation_maze)
         return ways
 
